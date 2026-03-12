@@ -53,7 +53,7 @@ If a previous plan exists, read its "Codebase Analysis" section and compare its 
 
 ```bash
 # Check what changed since the plan was written
-PLAN_COMMIT=$(grep -oP 'Commit: \K\S+' docs/plans/*.md 2>/dev/null | tail -1)
+PLAN_COMMIT=$(grep -o 'Commit: [^ ]*' docs/plans/*.md 2>/dev/null | tail -1 | sed 's/.*Commit: //')
 if [ -n "$PLAN_COMMIT" ]; then
     git diff --stat "$PLAN_COMMIT"..HEAD 2>/dev/null
 fi
