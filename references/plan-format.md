@@ -154,6 +154,19 @@ For single-repo projects, subtask titles use plain descriptions.
 
 [repeat for each task/subtask]
 
+## Execution Waves
+
+Tasks grouped by parallel execution opportunity:
+
+| Wave | Tasks | Can Run in Parallel | Estimated Duration |
+|------|-------|--------------------|--------------------|
+| 1 | T1.1 | - | [duration] |
+| 2 | T1.2, T1.3 | Yes — no shared dependencies | [longest task duration] |
+| 3 | T1.N | Solo — depends on all above | [duration] |
+
+**Total sequential estimate:** [sum of all tasks]
+**With parallelization:** [sum of wave durations] (saved [diff])
+
 ## Execution Order
 
 Recommended execution order based on dependencies:
