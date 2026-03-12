@@ -1,0 +1,35 @@
+{
+  "skill_name": "planner",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I need to add rate limiting to our API. We're getting hammered by brute force attempts and need to throttle requests per IP.",
+      "expected_output": "A plan with tasks covering: middleware implementation, config for rate limits, storage backend (redis/memory), tests, and documentation. Should produce a plan file and offer to create issues.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "/planner Add request/response logging with body dump capability — we need to be able to debug failures in production",
+      "expected_output": "A plan that analyzes the existing codebase, breaks down logging implementation into tasks, considers sensitive data masking, and creates a structured plan file.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "/planner Refactor the validation layer to support multiple token types (JWT, API key, OAuth2) instead of just the current single validation approach",
+      "expected_output": "A refactoring plan with strategy pattern or similar, phased approach to avoid breaking changes, migration tasks, and comprehensive test updates.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "/planner We have a monorepo with packages/api, packages/web, and packages/shared. Add user profile editing with avatar upload.",
+      "expected_output": "A plan that detects the monorepo structure and uses [service]: prefix in subtask titles (e.g., [api]: Add avatar upload endpoint, [web]: Add profile edit form, [shared]: Add validation schema). Should group work by service.",
+      "files": []
+    },
+    {
+      "id": 5,
+      "prompt": "/planner Add dark mode support to the app",
+      "expected_output": "A plan for a single-repo project that uses plain subtask titles without [service]: prefix. Should cover theme system, CSS variables, toggle component, persistence, and tests.",
+      "files": []
+    }
+  ]
+}
