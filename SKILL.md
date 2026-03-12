@@ -233,6 +233,29 @@ Show the full plan and ask for feedback:
 - [ ] [criterion 2]
 ```
 
+#### Parallel Execution Waves
+
+After the task table, show which tasks can run concurrently by grouping them into **waves**:
+
+```
+### Execution Waves
+
+| Wave | Tasks | Can Run in Parallel | Estimated Duration |
+|------|-------|--------------------|--------------------|
+| 1 | T1.1, T1.4 | Yes — no shared dependencies | 4h (longest task) |
+| 2 | T1.2 | Solo — depends on T1.1 | 4h |
+| 3 | T1.3 | Solo — depends on T1.2 | 8h |
+| 4 | T1.5 | Solo — depends on all above | 4h |
+
+**Total sequential estimate:** 24h
+**With parallelization:** 20h (saved 4h)
+```
+
+Wave grouping rules:
+- Tasks with no unfinished dependencies go in the same wave
+- Each wave starts only after all previous waves complete
+- Show time savings from parallel execution
+
 Then ask:
 ```
 Review the plan above:
