@@ -243,6 +243,30 @@ Review the plan above:
 
 If the user chooses Edit, take their feedback and revise the task breakdown. Repeat until approved.
 
+### Step 5.5: Subagent Review (Automatic)
+
+Before presenting the final plan for user approval, use an **Explore agent** to review the plan for gaps:
+
+```
+Review this plan for completeness. Check for:
+1. Missing dependencies between tasks
+2. Tasks that reference files/modules not discovered in codebase analysis
+3. Missing edge cases or error handling tasks
+4. Circular dependencies
+5. Tasks that are too large (>8h) and should be split
+6. Missing test coverage for critical paths
+```
+
+If the review finds issues, silently fix them before presenting to the user. If a fix requires significant restructuring, note it in the plan presentation:
+
+```
+**Review Notes:**
+- Moved T1.4 after T1.2 (discovered hidden dependency on auth middleware)
+- Split T1.3 into T1.3a and T1.3b (exceeded 8h estimate)
+```
+
+This step runs automatically — do not ask the user whether to review.
+
 ### Step 6: Create Plan File
 
 Save the approved plan to `docs/plans/<plan-name>.md`. Read `references/plan-format.md` for the exact file format.
