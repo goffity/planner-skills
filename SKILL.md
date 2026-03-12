@@ -26,6 +26,48 @@ What task or feature do you want to plan?
 
 If argument provided, use it as the task description.
 
+### Step 1.5: Clarifying Questions
+
+Before jumping into analysis and planning, ask **5-10 clarifying questions** to fully understand the task scope and constraints. This step prevents wasted effort from misunderstanding requirements.
+
+Generate questions based on the task description. Focus on areas that are ambiguous, have multiple valid approaches, or could significantly affect the plan structure. Categories to consider:
+
+**Scope & Boundaries:**
+- What's included vs explicitly out of scope?
+- Are there specific user roles or personas to consider?
+- Should this work with existing data/users or only new ones?
+
+**Technical Constraints:**
+- Are there specific technologies, libraries, or patterns to use (or avoid)?
+- Are there performance requirements (latency, throughput, data volume)?
+- Does this need to be backward-compatible?
+
+**Dependencies & Integration:**
+- Does this depend on other teams, services, or external APIs?
+- Are there existing systems this needs to integrate with?
+- Is there a deadline or release train to target?
+
+**Prioritization:**
+- What's the MVP vs nice-to-have?
+- Are there phases (launch with X, add Y later)?
+
+Present questions as a numbered list:
+
+```
+Before I plan this out, a few questions to make sure I scope it right:
+
+1. [Question about scope/boundaries]
+2. [Question about technical approach]
+3. [Question about constraints]
+4. [Question about integration]
+5. [Question about priority/MVP]
+...
+
+Answer what you can — skip any that aren't relevant. I'll make reasonable assumptions for anything unanswered.
+```
+
+After receiving answers (or if the user skips), incorporate the context into the planning process. Unanswered questions should be noted as assumptions in the plan's Context section.
+
 ### Step 2: Choose Language
 
 Ask the user which language to use for the plan output:
