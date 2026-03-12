@@ -169,6 +169,24 @@ Tasks grouped by parallel execution opportunity:
 **Total sequential estimate:** [sum of all tasks]
 **With parallelization:** [sum of wave durations] (saved [diff])
 
+## Dependency Graph
+
+```
+T1.1 ──→ T1.2 ──→ T1.3
+              └──→ T1.4
+T1.1~T1.4 ──→ T1.N (tests)
+```
+
+## Risks
+
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| [what could go wrong] | high/medium/low | high/medium/low | [prevention or handling strategy] |
+
+### Rollback Plan
+1. [Step to revert changes if needed]
+2. [Additional revert steps]
+
 ## Execution Order
 
 Recommended execution order based on dependencies:
