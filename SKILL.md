@@ -111,6 +111,18 @@ This detection affects subtask formatting:
 
 Split the work into one parent task and subtasks. Each subtask should be an atomic unit that can be completed and verified independently.
 
+#### Task Sizing Guidelines
+
+Each subtask should target the **2-8 hour sweet spot**. Use this table to evaluate task granularity:
+
+| Category | Duration | Signal | Action |
+|----------|----------|--------|--------|
+| **Too Large** | > 2 days | Hard to estimate; blocks other work; unclear progress | Break down further |
+| **Well-Sized** | 2-8 hours | Clear deliverable; single owner; daily visibility; easy to estimate | Keep as-is |
+| **Too Small** | < 1 hour | Over-planning; excessive tracking overhead | Combine with related tasks |
+
+If a subtask exceeds 8 hours (Effort: XL), consider splitting it into smaller subtasks. If multiple subtasks are under 1 hour each and closely related, merge them into one.
+
 #### Structure: Parent Task + Subtasks
 
 Always create a single **parent task (T1)** that represents the overall goal, with all work items as **subtasks (T1.1, T1.2, T1.3, ...)**. This gives the team one issue to track the big picture, with subtasks for the actual work.
