@@ -1,0 +1,89 @@
+name: Auto Release on Milestone Close
+
+on:
+  milestone:
+    types: [closed]
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Get milestone info
+        id: milestone
+        env:
+          MILESTONE_TITLE: ${{ github.event.milestone.title }}
+          MILESTONE_DESCRIPTION: ${{ github.event.milestone.description }}
+        run: |
+          # Extract version from milestone title (e.g., "v1.0.0 — Production Ready" → "v1.0.0")
+          VERSION=$(echo "$MILESTONE_TITLE" | grep -oE 'v[0-9]+\.[0-9]+\.[0-9]+')
+          if [ -z "$VERSION" ]; then
+            echo "No version found in milestone title: $MILESTONE_TITLE"
+            exit 1
+          fi
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "title=$MILESTONE_TITLE" >> "$GITHUB_OUTPUT"
+
+      - name: Check if tag already exists
+        id: check_tag
+        env:
+          VERSION: ${{ steps.milestone.outputs.version }}
+        run: |
+          if git rev-parse "$VERSION" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Generate release notes
+        if: steps.check_tag.outputs.exists == 'false'
+        id: notes
+        env:
+          VERSION: ${{ steps.milestone.outputs.version }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          REPO: ${{ github.repository }}
+        run: |
+          # Get closed issues from this milestone
+          MILESTONE_NUMBER=${{ github.event.milestone.number }}
+
+          FEATURES=""
+          FIXES=""
+          OTHERS=""
+
+          while IFS= read -r line; do
+            number=$(echo "$line" | jq -r '.number')
+            title=$(echo "$line" | jq -r '.title')
+
+            if echo "$title" | grep -qiE '^feat'; then
+              FEATURES="${FEATURES}- ${title} (#${number})\n"
+            elif echo "$title" | grep -qiE '^fix'; then
+              FIXES="${FIXES}- ${title} (#${number})\n"
+            else
+              OTHERS="${OTHERS}- ${title} (#${number})\n"
+            fi
+          done < <(gh api "repos/${REPO}/issues?milestone=${MILESTONE_NUMBER}&state=closed&per_page=100" --jq '.[] | {number, title}' -q '.')
+
+          NOTES="## What's Changed\n\n"
+          [ -n "$FEATURES" ] && NOTES="${NOTES}### Features\n${FEATURES}\n"
+          [ -n "$FIXES" ] && NOTES="${NOTES}### Fixes\n${FIXES}\n"
+          [ -n "$OTHERS" ] && NOTES="${NOTES}### Other\n${OTHERS}\n"
+          NOTES="${NOTES}### Install\n\n\`\`\`bash\nnpx skills add ${REPO} -g\n\`\`\`"
+
+          echo "$NOTES" > /tmp/release-notes.md
+
+      - name: Create release
+        if: steps.check_tag.outputs.exists == 'false'
+        env:
+          VERSION: ${{ steps.milestone.outputs.version }}
+          TITLE: ${{ steps.milestone.outputs.title }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "$VERSION" \
+            --title "$TITLE" \
+            --notes-file /tmp/release-notes.md
