@@ -56,9 +56,11 @@ jobs:
           FIXES=""
           OTHERS=""
 
-          while IFS= read -r line; do
-            number=$(echo "$line" | jq -r '.number')
-            title=$(echo "$line" | jq -r '.title')
+          ISSUES=$(gh api "repos/${REPO}/issues?milestone=${MILESTONE_NUMBER}&state=closed&per_page=100")
+
+          for i in $(echo "$ISSUES" | jq -r 'range(length)'); do
+            number=$(echo "$ISSUES" | jq -r ".[$i].number")
+            title=$(echo "$ISSUES" | jq -r ".[$i].title")
 
             if echo "$title" | grep -qiE '^feat'; then
               FEATURES="${FEATURES}- ${title} (#${number})\n"
@@ -67,7 +69,7 @@ jobs:
             else
               OTHERS="${OTHERS}- ${title} (#${number})\n"
             fi
-          done < <(gh api "repos/${REPO}/issues?milestone=${MILESTONE_NUMBER}&state=closed&per_page=100" --jq '.[] | {number, title}' -q '.')
+          done
 
           NOTES="## What's Changed\n\n"
           [ -n "$FEATURES" ] && NOTES="${NOTES}### Features\n${FEATURES}\n"
