@@ -233,6 +233,32 @@ Show the full plan and ask for feedback:
 - [ ] [criterion 2]
 ```
 
+#### Dependency Graph
+
+After the wave table, include an ASCII dependency graph to visualize task relationships:
+
+```
+### Dependency Graph
+
+T1.1 ──→ T1.2 ──→ T1.3
+              └──→ T1.4
+T1.1~T1.4 ──→ T1.5 (tests)
+```
+
+For larger plans, use a vertical layout:
+
+```
+T1.1 (Create auth middleware)
+ ├──→ T1.2 (Add JWT validation)
+ │     ├──→ T1.3 (Social login)
+ │     └──→ T1.4 (Login UI)
+ └──────────────────┐
+                    ▼
+              T1.5 (Tests)
+```
+
+Keep graphs compact. Use task IDs with short descriptions in parentheses for readability.
+
 Then ask:
 ```
 Review the plan above:

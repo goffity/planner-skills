@@ -150,6 +150,14 @@ For single-repo projects, subtask titles use plain descriptions.
 
 [repeat for each task/subtask]
 
+## Dependency Graph
+
+```
+T1.1 ──→ T1.2 ──→ T1.3
+              └──→ T1.4
+T1.1~T1.4 ──→ T1.N (tests)
+```
+
 ## Execution Order
 
 Recommended execution order based on dependencies:
