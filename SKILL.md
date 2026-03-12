@@ -31,12 +31,10 @@ If argument provided, use it as the task description.
 Ask the user which language to use for the plan output:
 
 ```
-Language for plan output:
-1. English
-2. Thai
+What language should the plan be written in? (default: English)
 ```
 
-Use the selected language for all generated content (plan file, issue bodies, summaries). Default to English if unclear.
+Use the selected language for all generated content (plan file, issue bodies, summaries). Default to English if no preference given.
 
 ### Step 3: Analyze Codebase
 
