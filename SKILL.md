@@ -233,6 +233,27 @@ Show the full plan and ask for feedback:
 - [ ] [criterion 2]
 ```
 
+#### Risks & Rollback
+
+Identify potential risks and mitigation strategies:
+
+```
+### Risks
+
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| [what could go wrong] | high/medium/low | high/medium/low | [how to prevent or handle] |
+| External API rate limits | high | medium | Implement retry with backoff; cache responses |
+| Breaking existing auth flow | high | low | Feature flag; run old + new in parallel first |
+
+### Rollback Plan
+1. [How to revert if things go wrong]
+2. [e.g., "Revert migration with `migrate down`"]
+3. [e.g., "Disable feature flag to restore old behavior"]
+```
+
+Focus on risks that are **actionable** — skip obvious ones like "server could crash." Include rollback steps that are specific to this plan's changes.
+
 Then ask:
 ```
 Review the plan above:

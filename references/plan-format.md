@@ -150,6 +150,16 @@ For single-repo projects, subtask titles use plain descriptions.
 
 [repeat for each task/subtask]
 
+## Risks
+
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| [what could go wrong] | high/medium/low | high/medium/low | [prevention or handling strategy] |
+
+### Rollback Plan
+1. [Step to revert changes if needed]
+2. [Additional revert steps]
+
 ## Execution Order
 
 Recommended execution order based on dependencies:
