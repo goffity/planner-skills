@@ -382,7 +382,7 @@ Show what was created:
 3. T1.3 - [title] (after T1.1, T1.2)
 
 **Next Steps:**
-- Use `/focus` to start working on T1.1
+- Start working on T1.1 (no dependencies)
 - View the full plan at docs/plans/[name].md
 ```
 
