@@ -232,6 +232,28 @@ For each subtask, define:
 | Dependencies | Which subtask IDs must finish first |
 | Labels | For issue tracker categorization |
 
+#### Estimation Techniques
+
+Use **T-shirt sizing** (S/M/L/XL) as the default. For tasks where more precision is needed, offer the **three-point estimation** technique:
+
+**Three-Point Estimation Formula:** `(Optimistic + 4×Likely + Pessimistic) / 6`
+
+Example:
+```
+T1.3: Add social login providers
+  Optimistic:  4h (just Google OAuth)
+  Likely:      8h (Google + GitHub with edge cases)
+  Pessimistic: 16h (token refresh bugs, provider-specific quirks)
+  Estimate:    (4 + 4×8 + 16) / 6 = 8.7h → Effort: L
+```
+
+Use three-point estimation when:
+- The task involves unfamiliar technology or external dependencies
+- There's significant uncertainty in scope
+- The team needs confidence intervals for timeline planning
+
+For most tasks, T-shirt sizing is sufficient. Only apply three-point when asked or when uncertainty is high.
+
 Order subtasks by dependency — independent subtasks first, dependent ones after their prerequisites. Write acceptance criteria for each subtask so it's clear when it's "done."
 
 **Monorepo example:**
