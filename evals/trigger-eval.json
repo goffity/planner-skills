@@ -1,0 +1,50 @@
+[
+  {
+    "query": "I need to add rate limiting to our API. Can you help me plan this out and break it into tasks?",
+    "should_trigger": true
+  },
+  {
+    "query": "Break down the authentication feature into subtasks with estimates",
+    "should_trigger": true
+  },
+  {
+    "query": "/planner Add user profile editing with avatar upload",
+    "should_trigger": true
+  },
+  {
+    "query": "I want to refactor the database layer. Where should I start? What are the steps?",
+    "should_trigger": true
+  },
+  {
+    "query": "Can you estimate the effort for migrating from REST to GraphQL?",
+    "should_trigger": true
+  },
+  {
+    "query": "Plan the CI/CD pipeline setup for our monorepo",
+    "should_trigger": true
+  },
+  {
+    "query": "We need to figure out tasks for adding dark mode support",
+    "should_trigger": true
+  },
+  {
+    "query": "Fix the typo in line 42 of main.go",
+    "should_trigger": false
+  },
+  {
+    "query": "What does the handleRequest function do?",
+    "should_trigger": false
+  },
+  {
+    "query": "Run the tests and show me the output",
+    "should_trigger": false
+  },
+  {
+    "query": "Create a new React component called UserAvatar",
+    "should_trigger": false
+  },
+  {
+    "query": "Review this pull request for bugs",
+    "should_trigger": false
+  }
+]

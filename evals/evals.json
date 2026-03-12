@@ -5,31 +5,79 @@
       "id": 1,
       "prompt": "I need to add rate limiting to our API. We're getting hammered by brute force attempts and need to throttle requests per IP.",
       "expected_output": "A plan with tasks covering: middleware implementation, config for rate limits, storage backend (redis/memory), tests, and documentation. Should produce a plan file and offer to create issues.",
-      "files": []
+      "files": [],
+      "expectations": [
+        "Output contains a task breakdown table with columns: ID, Title, Type, Priority, Effort, Deps",
+        "Has a parent task (T1) representing the overall goal",
+        "Has subtasks (T1.1, T1.2, etc.) under the parent task",
+        "Parent task includes a Current Flow section",
+        "Parent task includes a New Flow (after implementation) section",
+        "Includes a test subtask as the last subtask",
+        "Each subtask has Acceptance Criteria",
+        "Asks user to review/approve the plan before creating files",
+        "Offers to create issues on GitHub or Jira"
+      ]
     },
     {
       "id": 2,
       "prompt": "/planner Add request/response logging with body dump capability — we need to be able to debug failures in production",
       "expected_output": "A plan that analyzes the existing codebase, breaks down logging implementation into tasks, considers sensitive data masking, and creates a structured plan file.",
-      "files": []
+      "files": [],
+      "expectations": [
+        "Output contains a task breakdown table with columns: ID, Title, Type, Priority, Effort, Deps",
+        "Has a parent task (T1) with Current Flow and New Flow sections",
+        "Includes subtasks covering logging implementation",
+        "Considers sensitive data masking or redaction in the plan",
+        "Includes a test subtask as the last subtask",
+        "Each subtask lists Affected Files",
+        "Offers to save plan to docs/plans/ directory"
+      ]
     },
     {
       "id": 3,
       "prompt": "/planner Refactor the validation layer to support multiple token types (JWT, API key, OAuth2) instead of just the current single validation approach",
       "expected_output": "A refactoring plan with strategy pattern or similar, phased approach to avoid breaking changes, migration tasks, and comprehensive test updates.",
-      "files": []
+      "files": [],
+      "expectations": [
+        "Output contains a task breakdown table",
+        "Parent task includes Current Flow showing single validation approach",
+        "Parent task includes New Flow showing multi-token support",
+        "Subtasks are ordered by dependency to avoid breaking changes",
+        "Mentions a design pattern (strategy, adapter, or similar)",
+        "Includes a test subtask covering all token types",
+        "Subtask types include 'refactor' for at least one task",
+        "Each subtask has Acceptance Criteria including no behavior change for existing tests"
+      ]
     },
     {
       "id": 4,
       "prompt": "/planner We have a monorepo with packages/api, packages/web, and packages/shared. Add user profile editing with avatar upload.",
       "expected_output": "A plan that detects the monorepo structure and uses [service]: prefix in subtask titles (e.g., [api]: Add avatar upload endpoint, [web]: Add profile edit form, [shared]: Add validation schema). Should group work by service.",
-      "files": []
+      "files": [],
+      "expectations": [
+        "Detects or acknowledges the monorepo structure",
+        "Subtask titles use [service-name]: prefix format (e.g., [api]:, [web]:, [shared]:)",
+        "Has subtasks spanning multiple services/packages",
+        "Parent task includes Current Flow and New Flow sections",
+        "Includes a test subtask as the last subtask",
+        "Each subtask lists Affected Files with paths relative to the service",
+        "Offers to create issues on GitHub or Jira"
+      ]
     },
     {
       "id": 5,
       "prompt": "/planner Add dark mode support to the app",
       "expected_output": "A plan for a single-repo project that uses plain subtask titles without [service]: prefix. Should cover theme system, CSS variables, toggle component, persistence, and tests.",
-      "files": []
+      "files": [],
+      "expectations": [
+        "Subtask titles do NOT use [service]: prefix format",
+        "Uses plain descriptive titles for subtasks",
+        "Parent task includes Current Flow and New Flow sections",
+        "Includes a test subtask as the last subtask",
+        "Covers theme system or CSS variables in at least one subtask",
+        "Covers a toggle component or user preference persistence",
+        "Each subtask has Acceptance Criteria"
+      ]
     }
   ]
 }
