@@ -191,12 +191,14 @@ Recommended execution order based on dependencies:
 
 ### Effort Sizes
 
+Target the **2-8 hour sweet spot** per subtask. Tasks outside this range should be split or merged.
+
 | Size | Time Estimate | Description |
 |------|---------------|-------------|
-| S | < 2 hours | Small task, minor changes |
-| M | 2-4 hours | Medium task |
-| L | 4-8 hours | Large task, requires planning |
-| XL | > 8 hours | Very large, consider breaking down |
+| S | 1-2 hours | Small task, minor changes |
+| M | 2-4 hours | Medium task — ideal size |
+| L | 4-8 hours | Large task — still manageable |
+| XL | > 8 hours | Too large — consider breaking down into smaller subtasks |
 
 ### Priority Levels
 
