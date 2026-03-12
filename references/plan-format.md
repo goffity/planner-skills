@@ -82,6 +82,8 @@ For single-repo projects, subtask titles use plain descriptions.
 #### T1.1: [Subtask Title]
 
 **Type:** feature | **Priority:** high | **Effort:** M | **Issue:** -
+**Status:** pending
+**Log:**
 
 **Description:**
 [Subtask details]
@@ -198,9 +200,22 @@ Recommended execution order based on dependencies:
 | Status | Meaning |
 |--------|---------|
 | `pending` | Not started |
-| `in-progress` | In progress |
-| `completed` | Done |
-| `skipped` | Skipped (no longer needed) |
+| `in-progress` | Currently being worked on |
+| `done` | Completed |
+| `blocked` | Waiting on dependency or external factor |
+| `skipped` | Decided not to implement |
+
+### Log Format
+
+Each task can have a log of timestamped entries recording progress:
+
+```
+**Log:**
+- [2026-03-13 10:30] Started — setting up database schema
+- [2026-03-13 11:45] Done — 3 migration files created, tested locally
+```
+
+Logs are appended during implementation, not during planning. The plan file starts with empty logs.
 
 ### Effort Sizes
 
