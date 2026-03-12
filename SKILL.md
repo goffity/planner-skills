@@ -332,6 +332,53 @@ Wave grouping rules:
 - Each wave starts only after all previous waves complete
 - Show time savings from parallel execution
 
+#### Dependency Graph
+
+After the wave table, include an ASCII dependency graph to visualize task relationships:
+
+```
+### Dependency Graph
+
+T1.1 ──→ T1.2 ──→ T1.3
+              └──→ T1.4
+T1.1~T1.4 ──→ T1.5 (tests)
+```
+
+For larger plans, use a vertical layout:
+
+```
+T1.1 (Create auth middleware)
+ ├──→ T1.2 (Add JWT validation)
+ │     ├──→ T1.3 (Social login)
+ │     └──→ T1.4 (Login UI)
+ └──────────────────┐
+                    ▼
+              T1.5 (Tests)
+```
+
+Keep graphs compact. Use task IDs with short descriptions in parentheses for readability.
+
+#### Risks & Rollback
+
+Identify potential risks and mitigation strategies:
+
+```
+### Risks
+
+| Risk | Impact | Probability | Mitigation |
+|------|--------|-------------|------------|
+| [what could go wrong] | high/medium/low | high/medium/low | [how to prevent or handle] |
+| External API rate limits | high | medium | Implement retry with backoff; cache responses |
+| Breaking existing auth flow | high | low | Feature flag; run old + new in parallel first |
+
+### Rollback Plan
+1. [How to revert if things go wrong]
+2. [e.g., "Revert migration with `migrate down`"]
+3. [e.g., "Disable feature flag to restore old behavior"]
+```
+
+Focus on risks that are **actionable** — skip obvious ones like "server could crash." Include rollback steps that are specific to this plan's changes.
+
 Then ask:
 ```
 Review the plan above:
