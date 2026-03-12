@@ -23,6 +23,10 @@ Format for `docs/plans/<plan-name>.md` files created by `/planner`. Write the co
 
 [Context and goals for this plan]
 
+**Assumptions:**
+- [Assumption made for unanswered clarifying questions]
+- [e.g., "Assuming backward compatibility is required (not confirmed)"]
+
 ## Codebase Analysis
 
 **Commit:** [git short hash at time of analysis]
