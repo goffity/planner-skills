@@ -461,6 +461,16 @@ If no script is found, check if the `/jira` skill is available and use it instea
 
 Read `references/templates.md` to select the right issue body template based on task type (feature, bug, epic, story, chore, refactor).
 
+**Label Selection Rules:**
+
+Labels MUST match the actual services/repos being modified in each task — NOT the service that is affected indirectly. For example:
+- If a task only modifies `kol-frontend` code → label `Frontend` only
+- If a task modifies `kol-backend` code → label `Backend` only
+- If a task modifies both → label both `Frontend,Backend`
+- Do NOT add labels for services that are only called/consumed but not modified (e.g., don't add `kol-player` just because the frontend serves player pages)
+
+Check the available labels list from project memory and only use labels that exist. When in doubt, use fewer, more accurate labels rather than more, less accurate ones.
+
 **Pass 1 — Create parent tasks first, then subtasks:**
 
 For **GitHub**:
