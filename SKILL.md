@@ -512,9 +512,39 @@ $JIRA_SCRIPT link "is-subtask-of" "[SUBTASK_KEY]" "[PARENT_KEY]"
 
 Keep a mapping of task ID to issue number/key as you create them.
 
-**Pass 2 — Update dependencies, parent issue, and plan file:**
+**Pass 2 — Update dependencies, priority, and plan file:**
 
 After all issues exist, go back and:
+
+**Priority (Jira only):**
+
+`jira-client.sh` does not support `--priority` flag when creating issues — all issues default to "Medium". You MUST update priority via Jira REST API after creation to match the plan.
+
+Priority ID mapping:
+- `1` = Highest
+- `2` = High
+- `3` = Medium (default — no update needed)
+- `4` = Low
+- `5` = Lowest
+
+Load Jira credentials and update priority for each issue:
+```bash
+source <(grep -E '^(JIRA_DOMAIN|JIRA_EMAIL|JIRA_API_TOKEN)=' .jira-config 2>/dev/null || \
+         grep -E '^(JIRA_DOMAIN|JIRA_EMAIL|JIRA_API_TOKEN)=' ~/.config/claude-km/jira.conf 2>/dev/null)
+AUTH=$(echo -n "${JIRA_EMAIL}:${JIRA_API_TOKEN}" | base64)
+
+# Update priority for each issue that is NOT Medium
+for issue in [ISSUE_KEYS_WITH_HIGH_PRIORITY]; do
+    curl -s -X PUT \
+        -H "Authorization: Basic $AUTH" \
+        -H "Content-Type: application/json" \
+        -d '{"fields":{"priority":{"id":"2"}}}' \
+        "https://${JIRA_DOMAIN}/rest/api/3/issue/${issue}"
+done
+```
+
+**Dependencies:**
+
 - For Jira: create dependency links between subtasks with `$JIRA_SCRIPT link blocked-by [KEY] [DEP_KEY]`
 - For GitHub: add a comment on the parent issue listing all subtasks with checkboxes and dependency order:
 ```bash
