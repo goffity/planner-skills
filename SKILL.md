@@ -211,14 +211,15 @@ Every subtask description **MUST include**:
 
 This ensures developers know exactly where to make changes.
 
-#### Test Subtask (MANDATORY)
+#### Test Coverage (MANDATORY — per subtask, NOT bundled)
 
-Always include a **test subtask as the last subtask** under the parent task. This subtask:
-- Title: `Unit + Integration tests for [feature name]` (or `[service]: ...` in monorepo)
-- Type: `test`
-- Dependencies: all other subtasks (runs last)
-- Covers: unit tests, integration tests, and test scenarios
-- Lists specific test files to create/modify and key test cases
+**NEVER bundle tests into a single "test" subtask.** Each subtask that produces code MUST include its own tests as part of its acceptance criteria. 1 task = 1 job — the job includes writing and passing its own tests.
+
+- Each subtask's **Acceptance Criteria** must list the specific test cases it needs to pass
+- Each subtask's **Affected Files** must include the test files to create/modify
+- A subtask is not "done" until its tests pass
+
+If integration tests span multiple subtasks, create a **separate integration test subtask** for each integration boundary — not one big "test everything" task at the end.
 
 For each subtask, define:
 
@@ -266,8 +267,9 @@ Order subtasks by dependency — independent subtasks first, dependent ones afte
 | T1.2 | [api]: Add JWT token validation               | feature  | high     | M      | T1.1     |
 | T1.3 | [api]: Add social login providers             | feature  | medium   | L      | T1.2     |
 | T1.4 | [web]: Add login UI components                | feature  | high     | M      | T1.2     |
-| T1.5 | [test]: Unit + Integration tests for auth     | test     | medium   | M      | T1.1~T1.4|
 ```
+
+Each subtask above includes its own unit tests in its acceptance criteria. No separate bundled test task.
 
 **Single-repo example:**
 
@@ -279,8 +281,9 @@ Order subtasks by dependency — independent subtasks first, dependent ones afte
 | T1.2 | Add JWT token validation                     | feature  | high     | M      | T1.1     |
 | T1.3 | Add social login providers                   | feature  | medium   | L      | T1.2     |
 | T1.4 | Add login UI components                      | feature  | high     | M      | T1.2     |
-| T1.5 | Unit + Integration tests for auth            | test     | medium   | M      | T1.1~T1.4|
 ```
+
+Each subtask includes its own tests — 1 task = 1 job (code + tests).
 
 ### Step 5: Present Plan for Review
 
@@ -400,7 +403,8 @@ Review this plan for completeness. Check for:
 3. Missing edge cases or error handling tasks
 4. Circular dependencies
 5. Tasks that are too large (>8h) and should be split
-6. Missing test coverage for critical paths
+6. Subtasks missing test cases in their acceptance criteria (each subtask must own its tests)
+7. Bundled "test everything" tasks that should be split (1 task = 1 job)
 ```
 
 If the review finds issues, silently fix them before presenting to the user. If a fix requires significant restructuring, note it in the plan presentation:
