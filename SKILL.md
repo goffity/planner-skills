@@ -569,6 +569,66 @@ This ensures the parent issue on the tracker matches the plan file. Use the same
 
 - Update the plan file's Issue column with the real issue references
 
+### Step 7.5: Offer v2 Context Pack Scaffold (Optional)
+
+**Runs only if v2 pattern is available in workspace.**
+
+After the plan and issues are created, offer to scaffold a v2 Context-Driven Development context pack — the tactical layer that converts the plan into ready-to-implement verified state (testable AC, multi-repo audit, AP registry lookup, threat model for security features).
+
+```bash
+# Detect v2 pattern
+V2_ROOT=""
+for candidate in "." ".." "../.." "$HOME/Development/kol/kol-architecture"; do
+    if [ -f "$candidate/docs/patterns/v2-context-driven-development.md" ]; then
+        V2_ROOT=$(cd "$candidate" && pwd)
+        break
+    fi
+done
+```
+
+**If v2 detected, ask via AskUserQuestion:**
+
+```
+Plan created. Scaffold v2 context pack for implementation?
+
+v2 context pack adds: testable AC (Given/When/Then), verified ground truth
+with commit hashes, multi-repo branch audit, AP registry pitfalls, SVU
+sequences for tight-loop implementation.
+
+Recommended when: ≥2 repos, proto/DB schema change, security-critical,
+estimated > 1 day.
+
+1. Yes — scaffold docs/specs/<ISSUE_ID>/context/ from template
+2. No — plan alone is sufficient (small/single-repo task)
+```
+
+**If yes:**
+
+```bash
+CONTEXT_DIR="$V2_ROOT/docs/specs/$ISSUE_ID/context"
+TEMPLATE_DIR="$V2_ROOT/docs/patterns/templates/context-pack"
+PLAN_FILE="docs/plans/$PLAN_NAME.md"
+
+mkdir -p "$CONTEXT_DIR"
+cp "$TEMPLATE_DIR"/*.md "$CONTEXT_DIR/"
+
+# Inject source plan reference into 00-acceptance.md
+# (template has `<!-- source-plan -->` placeholder)
+sed -i.bak "s|<!-- source-plan -->|$PLAN_FILE|" "$CONTEXT_DIR/00-acceptance.md"
+rm "$CONTEXT_DIR/00-acceptance.md.bak"
+
+echo "Scaffolded: $CONTEXT_DIR"
+echo "Next: fill Phase 1.6 gate checklist in $CONTEXT_DIR/README.md"
+```
+
+**Contract:**
+- `/planner` owns: clarifying questions, effort estimation, Jira/GitHub issue creation, subtask decomposition, execution order
+- v2 context pack owns: testable AC, verified file:line refs, multi-repo audit, AP pitfalls, SVU sequences, threat model
+
+Plan file remains source-of-truth for **strategic** decisions. Context pack is source-of-truth for **tactical** implementation state.
+
+---
+
 ### Step 8: Summary
 
 Show what was created:
@@ -596,6 +656,7 @@ Show what was created:
 **Next Steps:**
 - Start working on T1.1 (no dependencies)
 - View the full plan at docs/plans/[name].md
+- (If v2 scaffolded) Fill Phase 1.6 gate at docs/specs/[ISSUE_ID]/context/
 ```
 
 ## Examples
