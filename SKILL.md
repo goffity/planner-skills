@@ -103,11 +103,16 @@ fi
 - **If there are changes**: do a focused analysis on what changed, and merge with the previous analysis.
 - **If no previous plan exists**: do a full analysis from scratch.
 
-For a full or focused analysis, use an Explore agent. Focus on:
+For a full or focused analysis, use Explore agents:
+
+- **Single repo:** one Explore agent.
+- **Multi-repo / monorepo spanning multiple services:** launch **one Explore agent per affected repo/service, in parallel** (send all Agent calls in a single message). Each agent digs deeper into its own repo, and the raw file dumps stay out of the main context — only the merged conclusions come back. Merge the per-repo summaries into one analysis.
+
+Each agent should focus on:
 
 - Project structure and tech stack
 - Architecture patterns and conventions already in use
-- Files and modules that will need changes
+- Files and modules that will need changes (with `file:line` references where possible)
 - Existing test setup and coverage
 - Related code that might be affected
 
@@ -221,6 +226,18 @@ This ensures developers know exactly where to make changes.
 
 If integration tests span multiple subtasks, create a **separate integration test subtask** for each integration boundary — not one big "test everything" task at the end.
 
+#### Subtask Verification Command (MANDATORY)
+
+Every subtask **MUST include a `Verify:` field** — one or more concrete, runnable commands whose success proves the subtask is done. "Done" must be machine-checkable, not just a human-readable checkbox.
+
+Examples:
+- `Verify: go test ./internal/auth/... && make build`
+- `Verify: curl -s localhost:8080/api/v1/accounts | jq '.data[0].is_slip_only'` (expect field present)
+- `Verify: EXPLAIN ANALYZE <query>` (expect Index Scan on idx_xxx, no Seq Scan)
+- `Verify: kubectl -n kol-dev rollout status deploy/user-api`
+
+If a subtask has no way to verify it mechanically, that's a signal the acceptance criteria are too vague — tighten them first. Acceptance criteria describe *what* done means; the Verify command proves *that* it's done.
+
 For each subtask, define:
 
 | Field | Values |
@@ -232,6 +249,7 @@ For each subtask, define:
 | Effort | S (< 2h), M (2-4h), L (4-8h), XL (> 8h) |
 | Dependencies | Which subtask IDs must finish first |
 | Labels | For issue tracker categorization |
+| Verify | Runnable command(s) proving the subtask is done |
 
 #### Estimation Techniques
 
@@ -310,6 +328,7 @@ Show the full plan and ask for feedback:
 **Acceptance Criteria:**
 - [ ] [criterion 1]
 - [ ] [criterion 2]
+**Verify:** `[runnable command proving done]`
 ```
 
 #### Parallel Execution Waves
@@ -382,17 +401,15 @@ Identify potential risks and mitigation strategies:
 
 Focus on risks that are **actionable** — skip obvious ones like "server could crash." Include rollback steps that are specific to this plan's changes.
 
-Then ask:
-```
-Review the plan above:
-1. Approve - proceed to create plan file and issues
-2. Edit - modify tasks (add/remove/change)
-3. Cancel - discard
-```
+Then ask for approval via **AskUserQuestion** (not free text), with options:
+
+1. **Approve** — proceed to create plan file and issues
+2. **Edit** — modify tasks (add/remove/change)
+3. **Cancel** — discard
 
 If the user chooses Edit, take their feedback and revise the task breakdown. Repeat until approved.
 
-### Step 5.5: Subagent Review (Automatic)
+### Step 5.5: Subagent Review + Fact Verification (Automatic, MANDATORY)
 
 Before presenting the final plan for user approval, use an **Explore agent** to review the plan for gaps:
 
@@ -406,6 +423,15 @@ Review this plan for completeness. Check for:
 6. Subtasks missing test cases in their acceptance criteria (each subtask must own its tests)
 7. Bundled "test everything" tasks that should be split (1 task = 1 job)
 ```
+
+**Fact verification (MANDATORY — never defer):** every concrete claim the plan makes about existing code MUST be verified against the actual source *before* the plan is finalized — not deferred to a later phase, a context pack, or implementation time. This includes:
+
+- File paths in **Affected Files** exist (or are explicitly marked "new file")
+- Function/method signatures, struct fields, and API contracts the plan builds on match the real code (`file:line`)
+- DB schema claims (table/column names, index existence, partition names) match the live schema or migration files
+- Proto/gRPC messages and Kafka topics referenced actually exist with the stated shape
+
+Have the review agent (or a parallel Explore agent per repo) check each claim and report `file:line` evidence. Anything that cannot be verified must either be removed, or explicitly moved to the plan's **Assumptions** section — a plan must never present an unverified claim as fact.
 
 If the review finds issues, silently fix them before presenting to the user. If a fix requires significant restructuring, note it in the plan presentation:
 
@@ -622,8 +648,8 @@ echo "Next: fill Phase 1.6 gate checklist in $CONTEXT_DIR/README.md"
 ```
 
 **Contract:**
-- `/planner` owns: clarifying questions, effort estimation, Jira/GitHub issue creation, subtask decomposition, execution order
-- v2 context pack owns: testable AC, verified file:line refs, multi-repo audit, AP pitfalls, SVU sequences, threat model
+- `/planner` owns: clarifying questions, effort estimation, Jira/GitHub issue creation, subtask decomposition, execution order, **fact verification of all plan claims (Step 5.5)**, per-task Verify commands
+- v2 context pack owns: testable AC (Given/When/Then), multi-repo branch audit at implementation time, AP pitfalls, SVU sequences, threat model
 
 Plan file remains source-of-truth for **strategic** decisions. Context pack is source-of-truth for **tactical** implementation state.
 

@@ -96,6 +96,8 @@ For single-repo projects, subtask titles use plain descriptions.
 - [ ] [criterion 1]
 - [ ] [criterion 2]
 
+**Verify:** `[runnable command proving done]`
+
 ---
 
 #### T1.2: [Subtask Title]
@@ -112,6 +114,8 @@ For single-repo projects, subtask titles use plain descriptions.
 **Acceptance Criteria:**
 - [ ] [criterion 1]
 - [ ] [criterion 2]
+
+**Verify:** `[runnable command proving done]`
 
 ---
 
@@ -135,6 +139,8 @@ For single-repo projects, subtask titles use plain descriptions.
 - [ ] Coverage ≥ 80%
 - [ ] [other criteria]
 
+**Verify:** `[e.g., go test ./... -cover && make build]`
+
 ---
 
 ### T2: [Flat Task Title]
@@ -151,6 +157,8 @@ For single-repo projects, subtask titles use plain descriptions.
 **Acceptance Criteria:**
 - [ ] [criterion 1]
 - [ ] [criterion 2]
+
+**Verify:** `[runnable command proving done]`
 
 ---
 
@@ -222,6 +230,10 @@ Recommended execution order based on dependencies:
 | `done` | Completed |
 | `blocked` | Waiting on dependency or external factor |
 | `skipped` | Decided not to implement |
+
+### Verify Field
+
+Every task/subtask carries a **Verify:** line — one or more runnable commands whose success proves the task is done (test command, curl + expected output, EXPLAIN plan, rollout status). Acceptance criteria describe *what* done means; Verify proves *that* it's done. Run it before marking a task `done`.
 
 ### Log Format
 
