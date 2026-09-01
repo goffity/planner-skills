@@ -26,36 +26,47 @@ What task or feature do you want to plan?
 
 If argument provided, use it as the task description.
 
-### Step 1.5: Clarifying Questions (Design-Tree Interview)
+### Step 1.5: Clarifying Questions
 
-Before jumping into analysis and planning, interview the user until the scope is genuinely settled. Map the open decisions as a **design tree**: every decision branches into the decisions that hang off it. Work the tree in **rounds** instead of one big list.
+Before jumping into analysis and planning, ask **5-10 clarifying questions** to fully understand the task scope and constraints. This step prevents wasted effort from misunderstanding requirements.
 
-**The frontier rule.** Each round, ask only the **frontier**: decisions whose prerequisites are already settled — questions you can ask *now* without guessing at answers you haven't heard yet. A question whose answer depends on another question still open in this round belongs to a *later* round. Number each question and **give your recommended answer** so the user can accept it in a word.
+Generate questions based on the task description. Focus on areas that are ambiguous, have multiple valid approaches, or could significantly affect the plan structure. Categories to consider:
 
-**Facts are your job, never the user's.** When a frontier question needs a fact from the environment (does this endpoint exist? what's the current schema? which services touch this flow?), dispatch an Explore agent to find it — don't ask the user anything you could look up yourself. Don't block on it: ask the rest of the frontier now, and fold the agent's findings into the next round. Only *decisions* go to the user.
+**Scope & Boundaries:**
+- What's included vs explicitly out of scope?
+- Are there specific user roles or personas to consider?
+- Should this work with existing data/users or only new ones?
 
-Question categories to mine for the tree:
+**Technical Constraints:**
+- Are there specific technologies, libraries, or patterns to use (or avoid)?
+- Are there performance requirements (latency, throughput, data volume)?
+- Does this need to be backward-compatible?
 
-- **Scope & Boundaries** — in vs out of scope, user roles, existing data vs new only
-- **Technical Constraints** — required/forbidden tech, performance targets, backward compatibility
-- **Dependencies & Integration** — other teams/services/external APIs, deadline or release train
-- **Prioritization** — MVP vs nice-to-have, phases
+**Dependencies & Integration:**
+- Does this depend on other teams, services, or external APIs?
+- Are there existing systems this needs to integrate with?
+- Is there a deadline or release train to target?
 
-Format a round like so:
+**Prioritization:**
+- What's the MVP vs nice-to-have?
+- Are there phases (launch with X, add Y later)?
+
+Present questions as a numbered list:
 
 ```
-Round 1 — a few decisions before I plan this out:
+Before I plan this out, a few questions to make sure I scope it right:
 
-❓ **Q1 — [decision title]**: [question, with options if applicable]
-➡️ Recommended: [your recommended answer + one-line why]
+1. [Question about scope/boundaries]
+2. [Question about technical approach]
+3. [Question about constraints]
+4. [Question about integration]
+5. [Question about priority/MVP]
+...
 
-❓ **Q2 — [decision title]**: [question]
-➡️ Recommended: [answer]
-
-Answer what you can — "ตามนั้น" accepts all recommendations. Skip any that aren't relevant.
+Answer what you can — skip any that aren't relevant. I'll make reasonable assumptions for anything unanswered.
 ```
 
-Settled answers reshape the tree and unblock the next frontier — recompute and ask the next round. Stop when the frontier is empty (nothing left silently assumed), the user says to proceed, or after ~3 rounds (diminishing returns — plan with assumptions instead). Unanswered questions and accepted recommendations become explicit assumptions in the plan's Context section.
+After receiving answers (or if the user skips), incorporate the context into the planning process. Unanswered questions should be noted as assumptions in the plan's Context section.
 
 ### Step 2: Choose Language
 
@@ -158,11 +169,6 @@ Each subtask should target the **2-8 hour sweet spot**. Use this table to evalua
 | **Too Small** | < 1 hour | Over-planning; excessive tracking overhead | Combine with related tasks |
 
 If a subtask exceeds 8 hours (Effort: XL), consider splitting it into smaller subtasks. If multiple subtasks are under 1 hour each and closely related, merge them into one.
-
-Two additional sizing rules:
-
-- **One context window per subtask.** A subtask should be implementable in a single fresh agent session — all the files it touches, its tests, and enough surrounding context must fit comfortably in one context window. A subtask that needs "read half the service first" is too large even if the hour estimate looks fine; split it or add a prefactoring subtask.
-- **Wide refactors get expand–contract, not one big task.** A wide refactor is one mechanical change (rename a column, retype a shared symbol, change a proto field) whose blast radius fans across many call sites, so no single slice can land green. Sequence it as: **expand** (add the new form beside the old — nothing breaks) → **migrate** call sites in batches sized by blast radius (per package/service, each batch its own subtask blocked by the expand, CI stays green because the old form still exists) → **contract** (delete the old form once no caller remains, blocked by every migrate batch).
 
 #### Structure: Parent Task + Subtasks
 
